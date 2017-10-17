@@ -1,0 +1,30 @@
+.title {
+    text-align: center;
+}
+.btn-create{
+    margin-bottom: 10px;
+}
+.menu-navigation{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    float: right;
+    padding: 15px;
+}
+tr.table-row{
+    cursor: pointer;
+}
+tr.table-row:hover{
+    background: #dbe7ff;
+    transition: 0.3s;
+}
+.btn-form{
+    margin-top: 10px;
+}
+.fa-backward{
+    padding: 4px;
+}
+.btn-send{
+    float: right;
+    margin-bottom: 100px;
+}

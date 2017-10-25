@@ -31,7 +31,7 @@
                             <tr onclick="window.location='{{ route('templates.show', ['id' => $template->id]) }}'" class="table-row">
                                 <td>{{ $template->name }}</td>
                                 <td>{!! $template->content !!}</td>
-                                <td width="25%">
+                                <td width="20%">
                                     <form action="{{ URL('templates/'. $template->id) }}" method="POST">
                                     <a href="{{ URL('templates/'. $template->id) }}" class="btn btn-md btn-info">Info</a>
                                     <a href="{{ URL('templates/'. $template->id .'/edit') }}" class="btn btn-md btn-success">Edit</a>

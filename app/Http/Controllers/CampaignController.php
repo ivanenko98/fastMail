@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bunch;
 use App\Campaign;
 use App\Http\Requests\CampaignRequest;
+use App\Jobs\SendEmail;
 use App\Mail\MailClass;
 use App\Observers\CampaignObserver;
 use App\Template;
@@ -141,9 +142,6 @@ class CampaignController extends Controller
      */
     public function update(CampaignRequest $request, Campaign $campaign)
     {
-//
-//        $campaign->update($request->all());
-
         if (!empty($request->name)&&!empty($request->description)) {
             $campaign->name = $request->name;
             $campaign->description = $request->description;
@@ -192,10 +190,17 @@ class CampaignController extends Controller
 
     public function send(Campaign $campaign){
 
-        foreach ($campaign->bunch->subscribers as $key => $subscriber){
-
-            Mail::to($subscriber->email)->send(new MailClass($campaign->name, $subscriber->name, $subscriber->email, $campaign->template->content));
-        }
+            if($campaign->bunch->subscribers->count() > 25){
+                foreach($campaign->bunch->subscribers->slice(0, 25) as $key => $subscriber){
+                    Mail::to($subscriber->email)->send(new MailClass($campaign->name, $subscriber->name, $subscriber->email, $campaign->template->content));
+                }
+                $job = new SendEmail($campaign);
+                $this->dispatch($job);
+            }else{
+                foreach($campaign->bunch->subscribers as $key => $subscriber){
+                    Mail::to($subscriber->email)->send(new MailClass($campaign->name, $subscriber->name, $subscriber->email, $campaign->template->content));
+                }
+            }
 
         return redirect()->route('campaigns.index')->withMessage('Campaign has been sent');
     }
